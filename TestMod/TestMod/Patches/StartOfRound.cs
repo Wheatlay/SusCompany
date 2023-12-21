@@ -22,11 +22,11 @@ namespace TestMod.Patches
             {
 
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
+                TestModBase.impostorsIDs.Clear();
 
                 Random random = new Random(___randomMapSeed);
                 int currentImpostorID;
                 int impostorsToSpawn;
-                List<int> impostorsIDs = new List<int>();
 
                 //Customizable sprawn rate
                 float impostorSpawnRate = 0.5f;
@@ -40,24 +40,26 @@ namespace TestMod.Patches
                     TestModBase.mls.LogInfo("Spawn rate is randomized");
                 }
 
-                while (impostorsIDs.Count < impostorsToSpawn)
+                while (TestModBase.impostorsIDs.Count < impostorsToSpawn)
                 {
                     currentImpostorID = random.Next(0, ___ClientPlayerList.Count);
-                    if (!impostorsIDs.Contains(currentImpostorID))
+
+                    if (!TestModBase.impostorsIDs.Contains(currentImpostorID))
                     {
-                        impostorsIDs.Add(currentImpostorID);
+                        TestModBase.impostorsIDs.Add(currentImpostorID);
+
                         TestModBase.mls.LogInfo("Player " + currentImpostorID + " is impostor");
+                        //playerControler = ___allPlayerObjects[currentImpostorID].GetComponent<PlayerControllerB>();
+                        //playerControler.isImpostor = true;
 
                     }
                 }
-                GameNetcodeStuff.PlayerControllerB playerControler;
+                
                 
 
-                if (impostorsIDs.Contains(___thisClientPlayerId))
+                if (TestModBase.impostorsIDs.Contains(___thisClientPlayerId))
                 {
-                    PlayerControllerBPatch.isImpostor = true;
-                   // playerControler = ___allPlayerObjects[].GetComponent<PlayerControllerB>();
-
+                    //playerControler = ___allPlayerObjects[].GetComponent<PlayerControllerB>();
                     HUDManager.Instance.DisplayTip("Alert", "You Are Impostor!", true, false, "");
                     HUDManager.Instance.AddTextToChatOnServer("I'm the impostor");
                 }
@@ -70,13 +72,14 @@ namespace TestMod.Patches
         [HarmonyPrefix]
         static void ShipLeftRemoveImposter()
         {
-            PlayerControllerBPatch.isImpostor = false;
+            //PlayerControllerBPatch.isImpostor = false;
+            TestModBase.impostorsIDs.Clear();
             TestModBase.mls.LogInfo("Removing Impostors");
         }
 
         [HarmonyPatch("Update")]
         [HarmonyPostfix]
-        static void CheckForImposterVictory(ref UnityEngine.GameObject[] ___allPlayerObjects, ref bool ___travellingToNewLevel)
+        static void CheckForImposterVictory(ref UnityEngine.GameObject[] ___allPlayerObjects)
         {
             GameNetcodeStuff.PlayerControllerB playerControler;
             int aliveCrewMates = 0;
@@ -84,31 +87,24 @@ namespace TestMod.Patches
             for (int i = 0; i < ___allPlayerObjects.Count(); i++)
             { 
                 playerControler = ___allPlayerObjects[i].GetComponent<PlayerControllerB>();
-                if (playerControler.isPlayerControlled)
-                {
-                    TestModBase.mls.LogInfo(playerControler + PlayerControllerBPatch.isImpostor.ToString());
 
-                    if (playerControler.isPlayerDead || !PlayerControllerBPatch.isImpostor)
+                if (playerControler.isPlayerControlled && !playerControler.isPlayerDead && !TestModBase.impostorsIDs.Contains(i))
                     {
                         aliveCrewMates++;
+
                     }
-                }
+                
             }
-                    
+
+            //TestModBase.mls.LogInfo("aliveCrewMates is " +aliveCrewMates);
+
             if (aliveCrewMates == 0)
             {
-                TestModBase.mls.LogInfo("Impostors Won");
+                //TestModBase.mls.LogInfo("Impostors Won");
+                StartOfRound.Instance.ShipLeaveAutomatically();
             }
 
         }
-        [HarmonyPatch(nameof(StartOfRound.OnLocalDisconnect))]
-        [HarmonyPrefix]
-        static void onDC()
-        {
-            PlayerControllerBPatch.isImpostor = false;
-            TestModBase.mls.LogInfo("Disconected clearing impostor status");
-        }
-
-     }
+    }
 
 }

@@ -9,25 +9,23 @@ using System.Threading.Tasks;
 
 namespace TestMod.Patches
 {
-    [HarmonyPatch(typeof(PlayerControllerB))]
+    [HarmonyPatch]
     class PlayerControllerBPatch
     {
-        public static bool isImpostor;
 
-        [HarmonyPatch("Update")]
+        [HarmonyPatch(typeof(PlayerControllerB),"Update")]
         [HarmonyPostfix]
-        static public void PlayerControllerBuPDATE(ref float ___sprintMeter)
+        static public void PlayerControllerUpdate(PlayerControllerB __instance)
         {
-            if (isImpostor == true)
+            if (TestModBase.impostorsIDs.Contains((int)__instance.playerClientId))
             {
-                ___sprintMeter = 1f;
+                __instance.sprintMeter = 1f;
             }
 
-            
+
         }
 
     }
-
 }
 
 

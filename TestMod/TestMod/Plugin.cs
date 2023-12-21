@@ -22,6 +22,8 @@ namespace TestMod
 
         public static ManualLogSource mls;
 
+        public static List<int> impostorsIDs = new List<int>();
+
 
         void Awake()
         {

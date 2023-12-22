@@ -1,11 +1,14 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using GameNetcodeStuff;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestMod.Patches;
+using LC_API;
 
 namespace TestMod
 {   
@@ -24,6 +27,10 @@ namespace TestMod
 
         public static List<int> impostorsIDs = new List<int>();
 
+        public static int DeadImpostors;
+        public static int RecoveredImpostors;
+
+
 
         void Awake()
         {
@@ -35,7 +42,10 @@ namespace TestMod
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
             mls.LogInfo("The "+ modName + " mod has awaken");
 
-            harmony.PatchAll();
+            harmony.PatchAll(typeof(TestModBase));
+            harmony.PatchAll(typeof(StartOfRoundPatch));
+            harmony.PatchAll(typeof(PlayerControllerBPatch));
+            
         }
 
     }

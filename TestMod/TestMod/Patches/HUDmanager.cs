@@ -7,24 +7,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace TestMod.Patches
+    
 {
     [HarmonyPatch(typeof(HUDManager))]
     internal class HUDManagerPatch
     {
-
-        public static string LCM = "";
-
-        [HarmonyPatch("Update")]
-        [HarmonyPostfix]
-        static void AssignLastChatMessage(ref string ___lastChatMessage)
+        [HarmonyPatch(nameof(HUDManager.ApplyPenalty))]
+        [HarmonyPrefix]
+        static void OveridePenaltyForImposortors(ref int playersDead,ref int bodiesInsured)
         {
-            if (___lastChatMessage.Length > 4)
-            {
-                LCM = ___lastChatMessage;
-            }
-
+            //playersDead -= TestModBase.DeadImpostors;
+            //bodiesInsured -= TestModBase.RecoveredImpostors;
         }
+
+
     }
 }

@@ -6,14 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LC_API.GameInterfaceAPI.Features;
 
 namespace TestMod.Patches
 {
     [HarmonyPatch(typeof(StartOfRound))]
     internal class StartOfRoundPatch
     {
-
-
         [HarmonyPatch("OnShipLandedMiscEvents")]
         //[HarmonyPatch("SceneManager_OnLoad")]
         [HarmonyPostfix]
@@ -50,17 +49,13 @@ namespace TestMod.Patches
 
                         TestModBase.mls.LogInfo("Player " + currentImpostorID + " is impostor");
                         //playerControler = ___allPlayerObjects[currentImpostorID].GetComponent<PlayerControllerB>();
-                        //playerControler.isImpostor = true;
-
                     }
                 }
-                
-                
 
                 if (TestModBase.impostorsIDs.Contains(___thisClientPlayerId))
                 {
                     //playerControler = ___allPlayerObjects[].GetComponent<PlayerControllerB>();
-                    HUDManager.Instance.DisplayTip("Alert", "You Are Impostor!", true, false, "");
+                    HUDManager.Instance.DisplayTip("Alert", "You Are  The Impostor!", true, false, "");
                     HUDManager.Instance.AddTextToChatOnServer("I'm the impostor");
                 }
 
@@ -75,35 +70,6 @@ namespace TestMod.Patches
             //PlayerControllerBPatch.isImpostor = false;
             TestModBase.impostorsIDs.Clear();
             TestModBase.mls.LogInfo("Removing Impostors");
-        }
-
-        [HarmonyPatch("Update")]
-        [HarmonyPostfix]
-        static void CheckForImposterVictory(ref UnityEngine.GameObject[] ___allPlayerObjects)
-        {
-            GameNetcodeStuff.PlayerControllerB playerControler;
-            int aliveCrewMates = 0;
-
-            for (int i = 0; i < ___allPlayerObjects.Count(); i++)
-            { 
-                playerControler = ___allPlayerObjects[i].GetComponent<PlayerControllerB>();
-
-                if (playerControler.isPlayerControlled && !playerControler.isPlayerDead && !TestModBase.impostorsIDs.Contains(i))
-                    {
-                        aliveCrewMates++;
-
-                    }
-                
-            }
-
-            //TestModBase.mls.LogInfo("aliveCrewMates is " +aliveCrewMates);
-
-            if (aliveCrewMates == 0)
-            {
-                //TestModBase.mls.LogInfo("Impostors Won");
-                StartOfRound.Instance.ShipLeaveAutomatically();
-            }
-
         }
     }
 

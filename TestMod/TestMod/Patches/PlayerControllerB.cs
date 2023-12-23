@@ -10,55 +10,40 @@ using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
 
 namespace TestMod.Patches
-{
-/*    class playerControlerFunctions
-    {
-        static public void CheckForImpostorVictory()
-        {
-            TestModBase.mls.LogInfo("KUUUUURWA");
-            var startOfRound = StartOfRound.Instance;
-            int aliveCrewMates = 0;
 
-            for (int i = 0; i < startOfRound.ClientPlayerList.Count(); i++)
+    [HarmonyPatch(typeof(PlayerControllerB))]
+    class PlayerControllerBPatch
+    {
+        [HarmonyPatch("Update")]
+        [HarmonyPostfix]
+        static public void PlayerControllerUpdate()
+        {   
+            if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.PlayerController.playerClientId))
             {
-                if (TestModBase.Players[i].isPlayerControlled && !TestModBase.Players[i].isPlayerDead && !TestModBase.impostorsIDs.Contains(i))
+                Player.LocalPlayer.PlayerController.sprintMeter = 1f;
+            }
+        }
+
+        
+        //DODAĆ SUBSCRYPCJE DO LEFT EVENT
+        static public void CheckForImpostorVictory(LC_API.GameInterfaceAPI.Events.EventArgs.Player.DyingEventArgs dyingEventArgs)
+        {
+            int aliveCrewMates = 0;
+            IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
+            while (activePlayers.MoveNext())
+            {
+                if (!activePlayers.Current.IsDead && !TestModBase.impostorsIDs.Contains((int)activePlayers.Current.ClientId))
                 {
                     aliveCrewMates++;
                 }
+
             }
-            TestModBase.mls.LogInfo("aliveCrewMates is : " + aliveCrewMates);
             if (aliveCrewMates == 0)
             {
                 TestModBase.mls.LogInfo("Impostors Won");
                 StartOfRound.Instance.ShipLeaveAutomatically();
             }
         }
-
-    }*/
-
-
-    [HarmonyPatch(typeof(PlayerControllerB))]
-    class PlayerControllerBPatch
-    {
-
-        [HarmonyPatch("Update")]
-        [HarmonyPostfix]
-        static public void PlayerControllerUpdate()
-        {
-            TestModBase.mls.LogInfo("Player.LocalPlayer is :" + LC_API.GameInterfaceAPI.Features.Player.LocalPlayer);
-            TestModBase.mls.LogInfo("Player.ShipState is :" + LC_API.GameInterfaceAPI.GameState.ShipState);
-
-
-
-
-            //           if (TestModBase.impostorsIDs.Contains((int)__instance.playerClientId))
-            //            {
-            //                __instance.sprintMeter = 1f;
-            //            }
-
-        }
-
-
     }
 }
 

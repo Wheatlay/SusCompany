@@ -41,12 +41,11 @@ namespace TestMod
             
             mls = BepInEx.Logging.Logger.CreateLogSource(modGUID);
             mls.LogInfo("The "+ modName + " mod has awaken");
+            harmony.PatchAll();
 
-            harmony.PatchAll(typeof(TestModBase));
-            harmony.PatchAll(typeof(StartOfRoundPatch));
-            harmony.PatchAll(typeof(PlayerControllerBPatch));
-            
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += PlayerControllerBPatch.CheckForImpostorVictory;
         }
+
 
     }
 

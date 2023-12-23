@@ -32,6 +32,7 @@ namespace TestMod
 
 
 
+
         void Awake()
         {
             if (Instance == null)
@@ -43,7 +44,8 @@ namespace TestMod
             mls.LogInfo("The "+ modName + " mod has awaken");
             harmony.PatchAll();
 
-            LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += PlayerControllerBPatch.CheckForImpostorVictory;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
+
         }
 
 

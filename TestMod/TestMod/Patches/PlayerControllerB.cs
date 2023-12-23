@@ -10,41 +10,41 @@ using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
 
 namespace TestMod.Patches
-
+{
     [HarmonyPatch(typeof(PlayerControllerB))]
     class PlayerControllerBPatch
     {
         [HarmonyPatch("Update")]
         [HarmonyPostfix]
         static public void PlayerControllerUpdate()
-        {   
-            if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.PlayerController.playerClientId))
+        {
+          /*  TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
+            IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
+            while (activePlayers.MoveNext())
+            {
+                TestModBase.mls.LogInfo("Username is :" + activePlayers.Current.Username + " ClientId is : " + activePlayers.Current.ClientId);
+            }
+            TestModBase.mls.LogInfo("StartOfRound.Instance.ClientPlayerList.Count is: "+StartOfRound.Instance.ClientPlayerList.Count);*/
+
+            if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
             {
                 Player.LocalPlayer.PlayerController.sprintMeter = 1f;
             }
         }
 
-        
-        //DODAĆ SUBSCRYPCJE DO LEFT EVENT
-        static public void CheckForImpostorVictory(LC_API.GameInterfaceAPI.Events.EventArgs.Player.DyingEventArgs dyingEventArgs)
+        [HarmonyPatch("KillPlayerClientRpc")]
+        [HarmonyPostfix]
+        static public void KillPlayerClientRpcPatch()
         {
-            int aliveCrewMates = 0;
-            IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
-            while (activePlayers.MoveNext())
-            {
-                if (!activePlayers.Current.IsDead && !TestModBase.impostorsIDs.Contains((int)activePlayers.Current.ClientId))
-                {
-                    aliveCrewMates++;
-                }
-
-            }
-            if (aliveCrewMates == 0)
-            {
-                TestModBase.mls.LogInfo("Impostors Won");
-                StartOfRound.Instance.ShipLeaveAutomatically();
-            }
+            OtherFunctions.CheckForImpostorVictory();
         }
+
+        [HarmonyPatch("KillPlayerServerRpc")]
+        [HarmonyPostfix]
+        static public void KillPlayerServerRpcPatch()
+        {
+            OtherFunctions.CheckForImpostorVictory();
+        }
+
     }
 }
-
-

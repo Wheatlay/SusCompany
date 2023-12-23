@@ -11,15 +11,13 @@ using LC_API.GameInterfaceAPI.Features;
 namespace TestMod.Patches
 {
     [HarmonyPatch(typeof(StartOfRound))]
-    internal class StartOfRoundPatch
+    class StartOfRoundPatch
     {
         [HarmonyPatch("OnShipLandedMiscEvents")]
         //[HarmonyPatch("SceneManager_OnLoad")]
         [HarmonyPostfix]
         static void ImpostorStartGame(ref Dictionary<ulong, int> ___ClientPlayerList, ref int ___randomMapSeed, ref int ___thisClientPlayerId, ref UnityEngine.GameObject[] ___allPlayerObjects,ref int ___currentLevelID)
-        {   if(___currentLevelID != 3)//Level nie jest sklepem
-            {
-
+        {   if(___currentLevelID != 3)
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 TestModBase.impostorsIDs.Clear();
 
@@ -28,10 +26,14 @@ namespace TestMod.Patches
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float impostorSpawnRate = 1f;
+                float impostorSpawnRate = 0.5f;
                 bool isImposterCountRandom = false;
 
                 impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);
+                
+                TestModBase.mls.LogInfo("Player.ActiveList is : " + Player.ActiveList);
+                TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
+                TestModBase.mls.LogInfo("impostorsToSpawn is : "+ impostorsToSpawn);
 
                 if (isImposterCountRandom)
                 {
@@ -41,30 +43,30 @@ namespace TestMod.Patches
 
                 while (TestModBase.impostorsIDs.Count < impostorsToSpawn)
                 {
-                    currentImpostorID = random.Next(0, Player.ActiveList.Count);
+                    currentImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
 
                     if (!TestModBase.impostorsIDs.Contains(currentImpostorID))
                     {
                         TestModBase.impostorsIDs.Add(currentImpostorID);
 
-                        TestModBase.mls.LogInfo("Player " + currentImpostorID + " is impostor");
+                        TestModBase.mls.LogInfo("Client ID " + currentImpostorID + " is impostor");
                     }
                 }
 
-                if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.PlayerController.playerClientId))
+                if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
                 {
                     HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
                 }
-            }
+            
         }
 
-        [HarmonyPatch(nameof(StartOfRound.ShipHasLeft))]
+        [HarmonyPatch("ShipHasLeft")]
         [HarmonyPrefix]
-        static void ShipLeftRemoveImposter()
+        static public void ShipHasLeftPatch()
         {
-            TestModBase.impostorsIDs.Clear();
-            TestModBase.mls.LogInfo("Removing Impostors");
+            OtherFunctions.RemoveImposter();
         }
+
     }
 
 }

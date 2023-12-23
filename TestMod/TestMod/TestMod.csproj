@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patches\OtherFunctions.cs" />
     <Compile Include="Patches\PlayerControllerB.cs" />
     <Compile Include="Patches\HUDmanager.cs" />
     <Compile Include="Patches\StartOfRound.cs" />

@@ -18,17 +18,23 @@ namespace TestMod.Patches
         [HarmonyPostfix]
         static public void PlayerControllerUpdate()
         {
-          /*  TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
-            IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
-            while (activePlayers.MoveNext())
+            /*  TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
+              IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
+              while (activePlayers.MoveNext())
+              {
+                  TestModBase.mls.LogInfo("Username is :" + activePlayers.Current.Username + " ClientId is : " + activePlayers.Current.ClientId);
+              }
+              TestModBase.mls.LogInfo("StartOfRound.Instance.ClientPlayerList.Count is: "+StartOfRound.Instance.ClientPlayerList.Count);*/
+            try
             {
-                TestModBase.mls.LogInfo("Username is :" + activePlayers.Current.Username + " ClientId is : " + activePlayers.Current.ClientId);
+                if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
+                {
+                    Player.LocalPlayer.PlayerController.sprintMeter = 1f;
+                }
             }
-            TestModBase.mls.LogInfo("StartOfRound.Instance.ClientPlayerList.Count is: "+StartOfRound.Instance.ClientPlayerList.Count);*/
-
-            if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
+            catch
             {
-                Player.LocalPlayer.PlayerController.sprintMeter = 1f;
+                TestModBase.mls.LogInfo("Failed to get Player.LocalPlayer.ClientId");
             }
         }
 

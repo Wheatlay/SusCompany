@@ -34,8 +34,6 @@ namespace TestMod.Patches
         [HarmonyPostfix]
         static public void PlayerControllerUpdate()
         {
-            
-
             IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
             while (activePlayers.MoveNext())
             {
@@ -56,6 +54,7 @@ namespace TestMod.Patches
                 if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
                 {
                     Player.LocalPlayer.PlayerController.sprintMeter = 1f;
+                    Player.LocalPlayer.PlayerController.nightVision.enabled = true;
                 }
 
             }

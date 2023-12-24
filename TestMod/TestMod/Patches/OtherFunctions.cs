@@ -70,6 +70,9 @@ namespace TestMod.Patches
         public static void RemoveImposter()
         {
             TestModBase.impostorsIDs.Clear();
+            Player.LocalPlayer.PlayerController.nightVision.intensity = 1000;
+            Player.LocalPlayer.PlayerController.nightVision.range = 2000;
+            Player.LocalPlayer.PlayerController.nightVision.enabled = false;
             TestModBase.mls.LogInfo("Removing Impostors");
         }
     }

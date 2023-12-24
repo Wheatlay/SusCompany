@@ -56,7 +56,11 @@ namespace TestMod.Patches
                 if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
                 {
                     HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
-                }
+                    Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
+                    Player.LocalPlayer.PlayerController.nightVision.range = 5000;
+            }
+
+
             
         }
 

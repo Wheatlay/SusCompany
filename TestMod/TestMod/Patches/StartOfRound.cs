@@ -16,7 +16,7 @@ namespace TestMod.Patches
         [HarmonyPatch("OnShipLandedMiscEvents")]
         //[HarmonyPatch("SceneManager_OnLoad")]
         [HarmonyPostfix]
-        static void ImpostorStartGame(ref Dictionary<ulong, int> ___ClientPlayerList, ref int ___randomMapSeed, ref int ___thisClientPlayerId, ref UnityEngine.GameObject[] ___allPlayerObjects,ref int ___currentLevelID)
+        public static void ImpostorStartGame(ref int ___randomMapSeed,ref int ___currentLevelID)
         {   if(___currentLevelID != 3)
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 TestModBase.impostorsIDs.Clear();
@@ -26,7 +26,7 @@ namespace TestMod.Patches
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float impostorSpawnRate = 0.5f;
+                float impostorSpawnRate = 1f;
                 bool isImposterCountRandom = false;
 
                 impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);

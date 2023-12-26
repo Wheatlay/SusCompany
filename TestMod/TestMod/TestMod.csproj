@@ -66,6 +66,7 @@
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Patches\AiPatches.cs" />
     <Compile Include="Patches\OtherFunctions.cs" />
     <Compile Include="Patches\PlayerControllerB.cs" />
     <Compile Include="Patches\Shovel.cs" />

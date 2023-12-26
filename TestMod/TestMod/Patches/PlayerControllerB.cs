@@ -8,24 +8,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
+using UnityEngine.Windows;
 
 namespace TestMod.Patches
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     class PlayerControllerBPatch
     {
-
-        [HarmonyPatch("Crouch")]
-        [HarmonyPostfix]
         static public void GiveImpostorTest()
         {
             int a = 111111111;
             int b = 4;
-            StartOfRoundPatch.ImpostorStartGame(ref a,ref b);
+            if (!TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
+            {
+                StartOfRoundPatch.ImpostorStartGame(ref a, ref b);
+            }
         }
-
-        [HarmonyPatch("LandFromJumpClientRpc")]
-        [HarmonyPostfix]
         static public void RemoveImposterTest()
         {
             OtherFunctions.RemoveImposter();
@@ -65,6 +63,17 @@ namespace TestMod.Patches
             }
 
 
+            if(BepInEx.UnityInput.Current.GetKeyDown("F1"))       
+            {
+                TestModBase.mls.LogInfo("F1 pressed");
+                GiveImpostorTest();
+            }
+
+            if (BepInEx.UnityInput.Current.GetKeyDown("F2"))
+            {
+                TestModBase.mls.LogInfo("F2 pressed");
+                RemoveImposterTest();
+            }
         }
 
         [HarmonyPatch("KillPlayerClientRpc")]

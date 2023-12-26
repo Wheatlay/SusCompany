@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace TestMod.Patches
-    
+
 {
     [HarmonyPatch(nameof(Shovel))]
     internal class ShovelPatch
@@ -19,7 +19,9 @@ namespace TestMod.Patches
         [HarmonyPostfix]
         static void OveridePenaltyForImposortors(ref PlayerControllerB ___previousPlayerHeldBy)
         {
-         if (___previousPlayerHeldBy.IsLocalPlayer && TestModBase.impostorsIDs.Contains((int)___previousPlayerHeldBy.actualClientId){
+            if (___previousPlayerHeldBy.IsLocalPlayer && TestModBase.impostorsIDs.Contains((int)___previousPlayerHeldBy.actualClientId){
+
+                //set previousPlayerHeldBy to false
 
             }
         }

@@ -8,6 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
+using System.Security.Policy;
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
+using System.Security.Cryptography;
 
 namespace TestMod.Patches
 {
@@ -74,6 +79,7 @@ namespace TestMod.Patches
             Player.LocalPlayer.PlayerController.nightVision.range = 2000;
             Player.LocalPlayer.PlayerController.nightVision.enabled = false;
             TestModBase.mls.LogInfo("Removing Impostors");
+
         }
 
         public static void GetImpostorStartingItem(int ItemNumber, Player player)
@@ -110,7 +116,7 @@ namespace TestMod.Patches
             item.ItemProperties.twoHanded = false;
             item.ItemProperties.isConductiveMetal = false;
             item.ItemProperties.isScrap = false;
-            if(itemNameIm == "Tragedy")
+            if (itemNameIm == "Tragedy")
             {
                 item.ScanNodeProperties.maxRange = 1;
             }
@@ -126,3 +132,4 @@ namespace TestMod.Patches
         }
     }
 }
+

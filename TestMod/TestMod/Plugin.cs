@@ -45,6 +45,7 @@ namespace TestMod
             harmony.PatchAll();
 
             LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.LocalPlayerDC;
 
         }
 

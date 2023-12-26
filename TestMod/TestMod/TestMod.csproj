@@ -40,8 +40,9 @@
     <Reference Include="BepInEx">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
-    <Reference Include="LC_API">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\plugins\LC_API.dll</HintPath>
+    <Reference Include="LC_API, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\plugins\2018-LC_API\LC_API.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,7 +68,7 @@
   <ItemGroup>
     <Compile Include="Patches\OtherFunctions.cs" />
     <Compile Include="Patches\PlayerControllerB.cs" />
-    <Compile Include="Patches\HUDmanager.cs" />
+    <Compile Include="Patches\Shovel.cs" />
     <Compile Include="Patches\StartOfRound.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

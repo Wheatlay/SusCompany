@@ -23,6 +23,7 @@ namespace TestMod.Patches
             int b = 4;
             StartOfRoundPatch.ImpostorStartGame(ref a,ref b);
         }
+
         [HarmonyPatch("LandFromJumpClientRpc")]
         [HarmonyPostfix]
         static public void RemoveImposterTest()

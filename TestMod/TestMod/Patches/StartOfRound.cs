@@ -17,7 +17,9 @@ namespace TestMod.Patches
         //[HarmonyPatch("SceneManager_OnLoad")]
         [HarmonyPostfix]
         public static void ImpostorStartGame(ref int ___randomMapSeed,ref int ___currentLevelID)
-        {   if(___currentLevelID != 3)
+        {
+            if (___currentLevelID != 3)
+            {
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 TestModBase.impostorsIDs.Clear();
 
@@ -30,10 +32,10 @@ namespace TestMod.Patches
                 bool isImposterCountRandom = false;
 
                 impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);
-                
+
                 TestModBase.mls.LogInfo("Player.ActiveList is : " + Player.ActiveList);
                 TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
-                TestModBase.mls.LogInfo("impostorsToSpawn is : "+ impostorsToSpawn);
+                TestModBase.mls.LogInfo("impostorsToSpawn is : " + impostorsToSpawn);
 
                 if (isImposterCountRandom)
                 {
@@ -48,7 +50,12 @@ namespace TestMod.Patches
                     if (!TestModBase.impostorsIDs.Contains(currentImpostorID))
                     {
                         TestModBase.impostorsIDs.Add(currentImpostorID);
+                       
+                        if (Player.LocalPlayer.IsHost)
+                        {
+                            OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == currentImpostorID));
 
+                        }
                         TestModBase.mls.LogInfo("Client ID " + currentImpostorID + " is impostor");
                     }
                 }
@@ -58,9 +65,8 @@ namespace TestMod.Patches
                     HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
                     Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
                     Player.LocalPlayer.PlayerController.nightVision.range = 5000;
+                }
             }
-
-
             
         }
 

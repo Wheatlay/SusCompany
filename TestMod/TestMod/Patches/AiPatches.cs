@@ -1,44 +1,67 @@
-using BepInEx.Logging;
 using GameNetcodeStuff;
 using HarmonyLib;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LC_API.GameInterfaceAPI.Features;
 
 namespace TestMod.Patches
 {
+    [HarmonyPatch(typeof(EnemyAI))]
     class EnemyAiPatch
     {
-        //Powoduje brak damagu przez single targetuj¹ce moby ale nadal siê path finduj¹ do impostora :(
+        //Impostor nie mo¿e zatrzymaæ coile heada' ciekawe
+        //larwa zacina sie(przynajmniej na single playerze) gdy spodnie na impostora
 
-        [HarmonyPatch((typeof(EnemyAI)),(nameof(EnemyAI.PlayerIsTargetable)))]
+        [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
         [HarmonyPostfix]
         static public void MonstersDontTarget(PlayerControllerB playerScript, ref bool __result)
         {
             if (TestModBase.impostorsIDs.Contains((int)playerScript.actualClientId))
             {
                 __result = false;
-                //output to console
                 TestModBase.mls.LogInfo("Player " + playerScript.actualClientId + " is impostor and is not targetable");
 
             }
         }
 
-
-        //Z jakiegoœ powodu nie dzia³a
-        [HarmonyPatch((typeof(Turret)),(nameof(Turret.CheckForPlayersInLineOfSight)))]
+        [HarmonyPatch((typeof(EnemyAI)), (nameof(EnemyAI.MeetsStandardPlayerCollisionConditions)))]
         [HarmonyPostfix]
-        static public void TurretsDontTarget(ref PlayerControllerB __result)
+        static public void MeetsStandardPlayerCollisionConditions(ref PlayerControllerB __result)
         {
-            if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+            try
             {
-                __result = null;
-                TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and is not targetable by turret");
-}
+                if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+                {
+                    TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and shouldnt colide with mobs");
+                    __result = null;
+
+                }
+            }
+            catch
+            {
+                
+            }
+
         }
+
+        [HarmonyPatch(nameof(EnemyAI.CheckLineOfSightForPlayer))]
+        [HarmonyPostfix]
+        static public void CheckLineOfSightForPlayerOverwrite(ref PlayerControllerB __result)
+        {
+            try
+            {
+                if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+                {
+                    TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and should not be in line of sight check");
+                    __result = null;
+
+                    //Mo¿emy mieæ problem z sytuacj¹ gdy impostor jest pierwszy, mo¿liwe ¿e mob siê wtedy zatnie.
+                }
+            }
+            catch
+            {
+
+            }
+
+        }
+
     }
+
 }

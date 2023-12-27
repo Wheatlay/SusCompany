@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TestMod</RootNamespace>
     <AssemblyName>TestMod</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Lethal Company\BepInEx\plugins\2018-LC_API\LC_API.dll</HintPath>
     </Reference>
+    <Reference Include="netstandard, Version=2.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\AiPatches.cs" />
+    <Compile Include="Patches\Turret.cs" />
     <Compile Include="Patches\OtherFunctions.cs" />
     <Compile Include="Patches\PlayerControllerB.cs" />
     <Compile Include="Patches\Shovel.cs" />

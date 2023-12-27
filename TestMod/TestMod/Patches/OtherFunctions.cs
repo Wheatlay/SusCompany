@@ -1,18 +1,6 @@
-﻿using BepInEx.Logging;
-using GameNetcodeStuff;
-using HarmonyLib;
-using System;
-using System.Collections;
+﻿using GameNetcodeStuff;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
-using System.Security.Policy;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-using System.Security.Cryptography;
 
 namespace TestMod.Patches
 {
@@ -89,7 +77,7 @@ namespace TestMod.Patches
             switch (ItemNumber)
             {
                 case 1:
-                    itemNameIm = "Shovel";//Łopata ma broken animacje i zmienia sie na two handed po swingu
+                    itemNameIm = "Shovel";//każdy item spawniony jako pierwszy jest zepsuty (shrug)
                     break;
                 case 2:
                     itemNameIm = "Tragedy";

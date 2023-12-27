@@ -1,17 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using GameNetcodeStuff;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestMod.Patches;
-using LC_API;
 
 namespace TestMod
-{   
+{
     [BepInPlugin(modGUID, modName, modVersion)]
     public class TestModBase : BaseUnityPlugin
     {

@@ -1,12 +1,5 @@
-﻿using BepInEx.Logging;
-using GameNetcodeStuff;
-using HarmonyLib;
-using System;
-using System.Collections;
+﻿using GameNetcodeStuff;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
 
 namespace TestMod.Patches
@@ -70,7 +63,61 @@ namespace TestMod.Patches
         public static void RemoveImposter()
         {
             TestModBase.impostorsIDs.Clear();
+            Player.LocalPlayer.PlayerController.nightVision.intensity = 1000;
+            Player.LocalPlayer.PlayerController.nightVision.range = 2000;
+            Player.LocalPlayer.PlayerController.nightVision.enabled = false;
             TestModBase.mls.LogInfo("Removing Impostors");
+
+        }
+
+        public static void GetImpostorStartingItem(int ItemNumber, Player player)
+        {
+            string itemNameIm;
+
+            switch (ItemNumber)
+            {
+                case 1:
+                    itemNameIm = "Shovel";//każdy item spawniony jako pierwszy jest zepsuty
+                    break;
+                case 2:
+                    itemNameIm = "Tragedy";
+                    break;
+                case 3:
+                    itemNameIm = "Extension ladder";
+                    break;
+                case 4:
+                    itemNameIm = "Zap gun";//Sprawdzić czy da zapować sojuszników
+                    break;
+                case 5:
+                    itemNameIm = "Stun grenade";
+                    break;
+                default:
+                    itemNameIm = "";
+                    break;
+            }
+            TestModBase.mls.LogInfo("itemNameIm is:" + itemNameIm);
+            TestModBase.mls.LogInfo("ItemNumber is:" + ItemNumber);
+            LC_API.GameInterfaceAPI.Features.Item item = LC_API.GameInterfaceAPI.Features.Item.CreateAndGiveItem(itemNameIm, player, default, false);
+            TestModBase.mls.LogInfo("item is:" + item.name);
+
+            item.ItemProperties.itemName = "Impostor's "+ itemNameIm;
+            item.ItemProperties.twoHanded = false;
+            item.ItemProperties.isConductiveMetal = false;
+            item.ItemProperties.isScrap = false;
+            if (itemNameIm == "Tragedy")
+            {
+                item.ScanNodeProperties.maxRange = 1;
+            }
+            TestModBase.mls.LogInfo("Adding item to slot result is:" + player.Inventory.TryAddItemToSlot(item, 3, false));
+        }
+        public static void LocalPlayerDC(LC_API.GameInterfaceAPI.Events.EventArgs.Player.LeftEventArgs leftEventArgs)
+        {
+            if (leftEventArgs.Player.IsLocalPlayer)
+            {
+                Player.Dictionary.Clear();
+                OtherFunctions.RemoveImposter();
+            }
         }
     }
 }
+

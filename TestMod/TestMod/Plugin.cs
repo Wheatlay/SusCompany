@@ -1,17 +1,11 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using GameNetcodeStuff;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TestMod.Patches;
-using LC_API;
 
 namespace TestMod
-{   
+{
     [BepInPlugin(modGUID, modName, modVersion)]
     public class TestModBase : BaseUnityPlugin
     {
@@ -44,10 +38,13 @@ namespace TestMod
             mls.LogInfo("The "+ modName + " mod has awaken");
             harmony.PatchAll();
 
-            LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
+            //LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
+            //LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.LocalPlayerDC;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += OtherFunctions.OnDiedCheckForImpostorVictory;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.OnLeftCheckForImpostorVictory;
+
 
         }
-
 
     }
 

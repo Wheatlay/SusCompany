@@ -1,12 +1,8 @@
-﻿using BepInEx.Logging;
-using GameNetcodeStuff;
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LC_API.GameInterfaceAPI.Features;
+using System.Collections.Generic;
 
 namespace TestMod.Patches
 {
@@ -17,23 +13,24 @@ namespace TestMod.Patches
         //[HarmonyPatch("SceneManager_OnLoad")]
         [HarmonyPostfix]
         public static void ImpostorStartGame(ref int ___randomMapSeed,ref int ___currentLevelID)
-        {   if(___currentLevelID != 3)
+        {
+            if (___currentLevelID != 3)
+            {
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 TestModBase.impostorsIDs.Clear();
 
                 Random random = new Random(___randomMapSeed);
-                int currentImpostorID;
+                int choosenImpostorID;
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float impostorSpawnRate = 1f;
+                float impostorSpawnRate = 0.5f;
                 bool isImposterCountRandom = false;
 
                 impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);
-                
-                TestModBase.mls.LogInfo("Player.ActiveList is : " + Player.ActiveList);
+
                 TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
-                TestModBase.mls.LogInfo("impostorsToSpawn is : "+ impostorsToSpawn);
+                TestModBase.mls.LogInfo("impostorsToSpawn is : " + impostorsToSpawn);
 
                 if (isImposterCountRandom)
                 {
@@ -43,20 +40,32 @@ namespace TestMod.Patches
 
                 while (TestModBase.impostorsIDs.Count < impostorsToSpawn)
                 {
-                    currentImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
+                    List<Player> players = Player.ActiveList.ToList();
+                    players.Sort((x, y) => x.ClientId.CompareTo(y.ClientId));
+                    choosenImpostorID = (int)players.ElementAt(random.Next(0, players.Count)).ClientId;
+                    //choosenImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
 
-                    if (!TestModBase.impostorsIDs.Contains(currentImpostorID))
+
+                    if (!TestModBase.impostorsIDs.Contains(choosenImpostorID))
                     {
-                        TestModBase.impostorsIDs.Add(currentImpostorID);
+                        TestModBase.impostorsIDs.Add(choosenImpostorID);
+                       
+                        if (Player.LocalPlayer.IsHost)
+                        {
+                            OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == choosenImpostorID));
 
-                        TestModBase.mls.LogInfo("Client ID " + currentImpostorID + " is impostor");
+                        }
+                        TestModBase.mls.LogInfo("Client ID " + choosenImpostorID + " is impostor");
                     }
                 }
 
                 if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
                 {
                     HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
+                    Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
+                    Player.LocalPlayer.PlayerController.nightVision.range = 5000;
                 }
+            }
             
         }
 

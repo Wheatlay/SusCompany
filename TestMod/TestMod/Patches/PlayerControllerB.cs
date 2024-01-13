@@ -41,6 +41,9 @@ namespace TestMod.Patches
                 }
             }
 
+            //TestModBase.mls.LogInfo("try to get player.localplayer");
+            //TestModBase.mls.LogInfo("Player.LocalPlayer is : " + Player.LocalPlayer.name);
+            Player.GetOrAdd(StartOfRound.Instance.localPlayerController);
             try
             {
                 if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
@@ -55,17 +58,39 @@ namespace TestMod.Patches
                 TestModBase.mls.LogInfo("Failed to get Player.LocalPlayer.ClientId");
             }
 
-
-            if(BepInEx.UnityInput.Current.GetKeyDown("F1"))       
+            //get impostor status debug
+            if (BepInEx.UnityInput.Current.GetKeyDown("F5"))       
             {
-                TestModBase.mls.LogInfo("F1 pressed");
+                TestModBase.mls.LogInfo("F5 pressed");
                 GiveImpostorTest();
             }
 
-            if (BepInEx.UnityInput.Current.GetKeyDown("F2"))
+            //remove impostor status debug
+            if (BepInEx.UnityInput.Current.GetKeyDown("F6"))
             {
-                TestModBase.mls.LogInfo("F2 pressed");
+                TestModBase.mls.LogInfo("F6 pressed");
                 RemoveImposterTest();
+            }
+
+            //Active list debug
+            if (BepInEx.UnityInput.Current.GetKeyDown("F9"))
+            {
+                TestModBase.mls.LogInfo("F9 pressed");
+                IEnumerator<Player> activePlayers2 = Player.ActiveList.GetEnumerator();
+                while (activePlayers2.MoveNext())
+                {
+                    if (activePlayers2.Current.IsLocalPlayer)
+                    {
+                        TestModBase.mls.LogInfo("Local player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.PlayerController.name);
+                    }
+                    else
+                    {
+                        TestModBase.mls.LogInfo("Player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.PlayerController.name);
+                    }
+                    
+                }
+
+
             }
         }
 
@@ -82,6 +107,5 @@ namespace TestMod.Patches
         {
             OtherFunctions.CheckForImpostorVictory();
         }
-
     }
 }

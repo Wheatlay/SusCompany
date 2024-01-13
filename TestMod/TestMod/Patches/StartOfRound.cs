@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using LC_API.GameInterfaceAPI.Features;
+using System.Collections.Generic;
 
 namespace TestMod.Patches
 {
@@ -19,16 +20,15 @@ namespace TestMod.Patches
                 TestModBase.impostorsIDs.Clear();
 
                 Random random = new Random(___randomMapSeed);
-                int currentImpostorID;
+                int choosenImpostorID;
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float impostorSpawnRate = 1f;
+                float impostorSpawnRate = 0.5f;
                 bool isImposterCountRandom = false;
 
                 impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);
 
-                TestModBase.mls.LogInfo("Player.ActiveList is : " + Player.ActiveList);
                 TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
                 TestModBase.mls.LogInfo("impostorsToSpawn is : " + impostorsToSpawn);
 
@@ -40,18 +40,22 @@ namespace TestMod.Patches
 
                 while (TestModBase.impostorsIDs.Count < impostorsToSpawn)
                 {
-                    currentImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
+                    List<Player> players = Player.ActiveList.ToList();
+                    players.Sort((x, y) => x.ClientId.CompareTo(y.ClientId));
+                    choosenImpostorID = (int)players.ElementAt(random.Next(0, players.Count)).ClientId;
+                    //choosenImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
 
-                    if (!TestModBase.impostorsIDs.Contains(currentImpostorID))
+
+                    if (!TestModBase.impostorsIDs.Contains(choosenImpostorID))
                     {
-                        TestModBase.impostorsIDs.Add(currentImpostorID);
+                        TestModBase.impostorsIDs.Add(choosenImpostorID);
                        
                         if (Player.LocalPlayer.IsHost)
                         {
-                            OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == currentImpostorID));
+                            OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == choosenImpostorID));
 
                         }
-                        TestModBase.mls.LogInfo("Client ID " + currentImpostorID + " is impostor");
+                        TestModBase.mls.LogInfo("Client ID " + choosenImpostorID + " is impostor");
                     }
                 }
 

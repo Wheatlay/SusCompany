@@ -38,11 +38,13 @@ namespace TestMod
             mls.LogInfo("The "+ modName + " mod has awaken");
             harmony.PatchAll();
 
-            LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
-            LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.LocalPlayerDC;
+            //LC_API.GameInterfaceAPI.Events.Handlers.Player.Joined += OtherFunctions.OnJoinedAddOtherClients;
+            //LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.LocalPlayerDC;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += OtherFunctions.OnDiedCheckForImpostorVictory;
+            LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.OnLeftCheckForImpostorVictory;
+
 
         }
-
 
     }
 

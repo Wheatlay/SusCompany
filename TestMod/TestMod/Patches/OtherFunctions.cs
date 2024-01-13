@@ -77,7 +77,7 @@ namespace TestMod.Patches
             switch (ItemNumber)
             {
                 case 1:
-                    itemNameIm = "Shovel";//każdy item spawniony jako pierwszy jest zepsuty (shrug)
+                    itemNameIm = "Shovel";//każdy item spawniony jako pierwszy jest zepsuty
                     break;
                 case 2:
                     itemNameIm = "Tragedy";

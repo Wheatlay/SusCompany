@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Patches\AiPatches.cs" />
+    <Compile Include="Patches\Networking.cs" />
     <Compile Include="Patches\Turret.cs" />
     <Compile Include="Patches\OtherFunctions.cs" />
     <Compile Include="Patches\PlayerControllerB.cs" />

@@ -3,6 +3,12 @@ using System;
 using System.Linq;
 using LC_API.GameInterfaceAPI.Features;
 using System.Collections.Generic;
+using LC_API.Networking;
+using LC_API.Networking.Serializers;
+using LC_API;
+using System.Collections;
+using UnityEngine;
+
 
 namespace TestMod.Patches
 {
@@ -19,25 +25,24 @@ namespace TestMod.Patches
                 TestModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 TestModBase.impostorsIDs.Clear();
 
-                Random random = new Random(___randomMapSeed);
+                System.Random random = new System.Random(___randomMapSeed);
                 int choosenImpostorID;
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float ConfigimpostorSpawnRate = 0.5f;
-                bool ConfigisImposterCountRandom = false;
+                float impostorSpawnRate = TestModBase.ConfigimpostorSpawnRate.Value;
+                bool isImposterCountRandom = TestModBase.ConfigisImposterCountRandom.Value;
 
-                impostorsToSpawn = (int)(Player.ActiveList.Count * ConfigimpostorSpawnRate);
+                impostorsToSpawn = (int)(Player.ActiveList.Count *impostorSpawnRate);
 
                 TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
                 TestModBase.mls.LogInfo("impostorsToSpawn is : " + impostorsToSpawn);
 
-                if (ConfigisImposterCountRandom)
+                if (isImposterCountRandom)
                 {
                     impostorsToSpawn = random.Next(0, impostorsToSpawn + 1);
                     TestModBase.mls.LogInfo("Spawn rate is randomized");
                 }
-
                 while (TestModBase.impostorsIDs.Count < impostorsToSpawn)
                 {
                     List<Player> players = Player.ActiveList.ToList();
@@ -72,6 +77,16 @@ namespace TestMod.Patches
         static public void ShipHasLeftPatch()
         {
             OtherFunctions.RemoveImposter();
+        }
+
+        [NetworkMessage("SyncConfig")]
+        public static void SyncHandler(ulong sender, Networking message)
+        {
+            TestModBase.mls.LogInfo("Recived config from host");
+            TestModBase.mls.LogInfo("HostImpostorSpawnRate is : " + message.HostImpostorSpawnRate);
+            TestModBase.mls.LogInfo("isImposterCountRandom is : " + message.isImposterCountRandom);
+            TestModBase.ConfigimpostorSpawnRate.Value = message.HostImpostorSpawnRate;
+            TestModBase.ConfigisImposterCountRandom.Value = message.isImposterCountRandom;
         }
 
     }

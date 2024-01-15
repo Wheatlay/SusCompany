@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using LC_API.Networking;
 using System.Collections.Generic;
 using TestMod.Patches;
 
@@ -22,8 +23,8 @@ namespace TestMod
         public static int DeadImpostors;
         public static int RecoveredImpostors;
 
-        private ConfigEntry<float> ConfigimpostorSpawnRate;
-        private ConfigEntry<bool> ConfigisImposterCountRandom;
+        public static ConfigEntry<float> ConfigimpostorSpawnRate;
+        public static ConfigEntry<bool> ConfigisImposterCountRandom;
 
 
 
@@ -45,6 +46,7 @@ namespace TestMod
             //LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.LocalPlayerDC;
             LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += OtherFunctions.OnDiedCheckForImpostorVictory;
             LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.OnLeftCheckForImpostorVictory;
+            Network.RegisterAll();
 
 
         }

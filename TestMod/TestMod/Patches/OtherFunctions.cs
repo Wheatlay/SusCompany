@@ -116,7 +116,6 @@ namespace TestMod.Patches
             {
                 item.ScanNodeProperties.maxRange = 1;
             }
-
             TestModBase.mls.LogInfo("Testing item name"+item.name);
             TestModBase.mls.LogInfo("Testing player name" + player.name);
 

@@ -24,15 +24,15 @@ namespace TestMod.Patches
                 int impostorsToSpawn;
 
                 //Customizable sprawn rate
-                float impostorSpawnRate = 0.5f;
-                bool isImposterCountRandom = false;
+                float ConfigimpostorSpawnRate = 0.5f;
+                bool ConfigisImposterCountRandom = false;
 
-                impostorsToSpawn = (int)(Player.ActiveList.Count * impostorSpawnRate);
+                impostorsToSpawn = (int)(Player.ActiveList.Count * ConfigimpostorSpawnRate);
 
                 TestModBase.mls.LogInfo("Player.ActiveList.Count is : " + Player.ActiveList.Count);
                 TestModBase.mls.LogInfo("impostorsToSpawn is : " + impostorsToSpawn);
 
-                if (isImposterCountRandom)
+                if (ConfigisImposterCountRandom)
                 {
                     impostorsToSpawn = random.Next(0, impostorsToSpawn + 1);
                     TestModBase.mls.LogInfo("Spawn rate is randomized");

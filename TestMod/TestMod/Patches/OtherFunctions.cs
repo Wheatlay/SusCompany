@@ -150,7 +150,6 @@ namespace TestMod.Patches
         {
             if (leftEventArgs.Player.IsLocalPlayer)
             {
-                Player.Dictionary.Clear();
                 OtherFunctions.RemoveImposter();
             }
         }

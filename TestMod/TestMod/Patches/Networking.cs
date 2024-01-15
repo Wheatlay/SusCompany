@@ -23,8 +23,10 @@ namespace TestMod.Patches
             if (Player.LocalPlayer.IsHost)
             {
                 TestModBase.mls.LogInfo("Sending config to clients");
-                Network.Broadcast("SyncConfig", new Networking() { HostImpostorSpawnRate = 20f, isImposterCountRandom = false });
+                Network.Broadcast("SyncConfig", new Networking() { HostImpostorSpawnRate = TestModBase.ConfigimpostorSpawnRate.Value,
+                    isImposterCountRandom = TestModBase.ConfigisImposterCountRandom.Value});
             }
         }
     }
+    
 }

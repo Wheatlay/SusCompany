@@ -6,8 +6,7 @@ namespace TestMod.Patches
     [HarmonyPatch(typeof(EnemyAI))]
     class EnemyAiPatch
     {
-        //Impostor nie mo¿e zatrzymaæ coile heada' ciekawe
-        //larwa zacina sie(przynajmniej na single playerze) gdy spodnie na impostora
+        //Larwa get stuck when it fall on impostor (at least on single player)
 
         [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
         [HarmonyPostfix]
@@ -52,7 +51,8 @@ namespace TestMod.Patches
                     TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and should not be in line of sight check");
                     __result = null;
 
-                    //Mo¿emy mieæ problem z sytuacj¹ gdy impostor jest pierwszy, mo¿liwe ¿e mob siê wtedy zatnie.
+                    //We might have a problem with situation when impostor is first in check line of sight, mob might get stuck then.
+
                 }
             }
             catch

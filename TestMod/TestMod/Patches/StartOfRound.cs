@@ -43,8 +43,6 @@ namespace TestMod.Patches
                     List<Player> players = Player.ActiveList.ToList();
                     players.Sort((x, y) => x.ClientId.CompareTo(y.ClientId));
                     choosenImpostorID = (int)players.ElementAt(random.Next(0, players.Count)).ClientId;
-                    //choosenImpostorID = (int)Player.ActiveList.ElementAt(random.Next(0, Player.ActiveList.Count)).ClientId;
-
 
                     if (!TestModBase.impostorsIDs.Contains(choosenImpostorID))
                     {

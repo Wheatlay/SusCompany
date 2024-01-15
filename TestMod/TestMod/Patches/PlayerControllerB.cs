@@ -2,6 +2,11 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using LC_API.GameInterfaceAPI.Features;
+using System.Linq;
+using System.Collections;
+using Unity.Netcode;
+using static LC_API.GameInterfaceAPI.Features.Player;
+using System.Runtime.CompilerServices;
 
 namespace TestMod.Patches
 {
@@ -41,9 +46,6 @@ namespace TestMod.Patches
                 }
             }
 
-            //TestModBase.mls.LogInfo("try to get player.localplayer");
-            //TestModBase.mls.LogInfo("Player.LocalPlayer is : " + Player.LocalPlayer.name);
-            Player.GetOrAdd(StartOfRound.Instance.localPlayerController);
             try
             {
                 if (TestModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
@@ -81,16 +83,40 @@ namespace TestMod.Patches
                 {
                     if (activePlayers2.Current.IsLocalPlayer)
                     {
-                        TestModBase.mls.LogInfo("Local player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.PlayerController.name);
+                        TestModBase.mls.LogInfo("Local player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.Username);
                     }
                     else
                     {
-                        TestModBase.mls.LogInfo("Player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.PlayerController.name);
+                        TestModBase.mls.LogInfo("Player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.Username);
                     }
                     
                 }
 
 
+            }
+
+            //give impostor item debug
+            if (BepInEx.UnityInput.Current.GetKeyDown("F10"))
+            {
+                TestModBase.mls.LogInfo("F10 pressed");
+
+                TestModBase.mls.LogInfo("Giving item 1");
+                TestModBase.mls.LogInfo(Player.LocalPlayer.name);
+                OtherFunctions.GetImpostorStartingItem(1,Player.LocalPlayer);
+            }
+            if (BepInEx.UnityInput.Current.GetKeyDown("F11"))
+            {
+                TestModBase.mls.LogInfo("F11 pressed");
+
+                TestModBase.mls.LogInfo("Giving item 2");
+                OtherFunctions.GetImpostorStartingItem(2, Player.LocalPlayer);
+            }
+            if (BepInEx.UnityInput.Current.GetKeyDown("F12"))
+            {
+                TestModBase.mls.LogInfo("F12 pressed");
+
+                TestModBase.mls.LogInfo("Giving item 3");
+                OtherFunctions.GetImpostorStartingItem(3, Player.LocalPlayer);
             }
         }
 

@@ -47,6 +47,7 @@ namespace TestMod
             LC_API.GameInterfaceAPI.Events.Handlers.Player.Dying += OtherFunctions.OnDiedCheckForImpostorVictory;
             LC_API.GameInterfaceAPI.Events.Handlers.Player.Left += OtherFunctions.OnLeftCheckForImpostorVictory;
             Network.RegisterAll();
+            OtherFunctions.RegisterConsoleCommands();
 
 
         }

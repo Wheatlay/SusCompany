@@ -95,29 +95,12 @@ namespace TestMod.Patches
 
             }
 
-            //give impostor item debug
+            //debug
             if (BepInEx.UnityInput.Current.GetKeyDown("F10"))
             {
                 TestModBase.mls.LogInfo("F10 pressed");
-
-                TestModBase.mls.LogInfo("Giving item 1");
-                TestModBase.mls.LogInfo(Player.LocalPlayer.name);
-                OtherFunctions.GetImpostorStartingItem(1,Player.LocalPlayer);
             }
-            if (BepInEx.UnityInput.Current.GetKeyDown("F11"))
-            {
-                TestModBase.mls.LogInfo("F11 pressed");
 
-                TestModBase.mls.LogInfo("Giving item 2");
-                OtherFunctions.GetImpostorStartingItem(2, Player.LocalPlayer);
-            }
-            if (BepInEx.UnityInput.Current.GetKeyDown("F12"))
-            {
-                TestModBase.mls.LogInfo("F12 pressed");
-
-                TestModBase.mls.LogInfo("Giving item 3");
-                OtherFunctions.GetImpostorStartingItem(3, Player.LocalPlayer);
-            }
         }
 
         [HarmonyPatch("KillPlayerClientRpc")]

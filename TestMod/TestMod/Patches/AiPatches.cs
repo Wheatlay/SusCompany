@@ -16,7 +16,6 @@ namespace TestMod.Patches
             {
                 __result = false;
                 TestModBase.mls.LogInfo("Player " + playerScript.actualClientId + " is impostor and is not targetable");
-
             }
         }
 
@@ -30,12 +29,11 @@ namespace TestMod.Patches
                 {
                     TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and shouldnt colide with mobs");
                     __result = null;
-
                 }
             }
             catch
             {
-                
+
             }
 
         }
@@ -50,9 +48,7 @@ namespace TestMod.Patches
                 {
                     TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and should not be in line of sight check");
                     __result = null;
-
                     //We might have a problem with situation when impostor is first in check line of sight, mob might get stuck then.
-
                 }
             }
             catch

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LC_API.GameInterfaceAPI.Features;
 using UnityEngine;
 using System.Collections;
+using System.Runtime.Remoting.Messaging;
 
 namespace TestMod.Patches
 {
@@ -63,6 +64,7 @@ namespace TestMod.Patches
                 }
             }
         }*/
+        
 
         public static void RemoveImposter()
         {
@@ -104,7 +106,6 @@ namespace TestMod.Patches
 
             LC_API.GameInterfaceAPI.Features.Item item;
             item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, false, player.Position, default);
-            //item = LC_API.GameInterfaceAPI.Features.Item.CreateAndGiveItem(itemNameIm, player, false, default);
 
             TestModBase.mls.LogInfo("item is:" + item);
 
@@ -118,11 +119,9 @@ namespace TestMod.Patches
             }
             TestModBase.mls.LogInfo("Testing item name"+item.name);
             TestModBase.mls.LogInfo("Testing player name" + player.name);
-
             TestModBase.mls.LogInfo("Trying to add item to slot");
             if (player.IsLocalPlayer)
             {
-                
                 try
                 {
                     Player.LocalPlayer.Inventory.TryAddItemToSlot(item, 3, false);
@@ -145,6 +144,73 @@ namespace TestMod.Patches
             }
         }
 
+        public static void RegisterConsoleCommands()
+        {
+                TestModBase.mls.LogInfo("Registering console command");
+                LC_API.ClientAPI.CommandHandler.RegisterCommand("suschance", (string[] args) =>
+                {
+
+                    float.TryParse(args[0], out float number);
+                    if (CheckConsoleCommand() && 0 < number && number < 1)
+                    {
+                        TestModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
+                        TestModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
+                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to"+ args[0].ToString(), 1f,0, false);
+                    }
+                    else
+                    {
+                        TestModBase.mls.LogInfo("Invalid argument");
+                        Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: Decimal number beetween 0-1. Ex: 0,25", 3f, default, true);
+                    }
+
+                });
+            
+
+                LC_API.ClientAPI.CommandHandler.RegisterCommand("susrandom", (string[] args) =>
+                {
+                    if (CheckConsoleCommand())
+                    {
+                        if (args[0] == "yes")
+                        {
+                            TestModBase.mls.LogInfo("Impostors Random changed to true");
+                            TestModBase.ConfigisImposterCountRandom.Value = true;
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors Randomization changed succesfuly to true ", 1f, 0, false);
+                        }
+                        else if (args[0] == "no")
+                        {
+                            TestModBase.mls.LogInfo("Impostors Random changed to false");
+                            TestModBase.ConfigisImposterCountRandom.Value = false;
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors Randomization changed succesfuly to false ", 1f, 0, false);
+                        }
+                        else
+                        {
+                            TestModBase.mls.LogInfo("Invalid argument");
+                            Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: yes , no", 3f, default, true);
+                        }
+                    }
+                });
+
+        }
+        public static bool CheckConsoleCommand()
+        {
+            if (LC_API.GameInterfaceAPI.GameState.ShipState == LC_API.Data.ShipState.InOrbit)
+            {
+                if (Player.LocalPlayer.IsHost)
+                {
+                    return true;
+                }
+                else
+                {
+                    TestModBase.mls.LogInfo("You are not the host");
+                    Player.LocalPlayer.QueueTip("Error", "You are not the host", 3f, default, true);
+                }
+            }
+            else
+            {
+                TestModBase.mls.LogInfo("Can't change impostors config while not in orbit");
+            }
+            return false;
+        }
         public static void LocalPlayerDC(LC_API.GameInterfaceAPI.Events.EventArgs.Player.LeftEventArgs leftEventArgs)
         {
             if (leftEventArgs.Player.IsLocalPlayer)

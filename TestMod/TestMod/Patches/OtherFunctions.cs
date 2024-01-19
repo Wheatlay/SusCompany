@@ -44,28 +44,6 @@ namespace TestMod.Patches
             CheckForImpostorVictory();
         }
 
-        //Unnecesary after LC_API update
-/*        static public void OnJoinedAddOtherClients(LC_API.GameInterfaceAPI.Events.EventArgs.Player.JoinedEventArgs joinedEventArgs)
-        {
-
-            if (joinedEventArgs.Player.IsLocalPlayer && !joinedEventArgs.Player.IsHost)
-            {
-                TestModBase.mls.LogInfo("Local player joined");
-
-                for (int i = 0; i <= StartOfRound.Instance.allPlayerObjects.Length; i++)
-                {
-                    if (StartOfRound.Instance.allPlayerObjects[i].GetComponent<PlayerControllerB>().isPlayerControlled)
-                    {
-                        Player.GetOrAdd(StartOfRound.Instance.allPlayerObjects[i].GetComponent<PlayerControllerB>());
-                        TestModBase.mls.LogInfo("Adding other player" + StartOfRound.Instance.allPlayerObjects[i].GetComponent<PlayerControllerB>().name +
-                            " [" + StartOfRound.Instance.allPlayerObjects[i].GetComponent<PlayerControllerB>().actualClientId + "]");
-                    }
-
-                }
-            }
-        }*/
-        
-
         public static void RemoveImposter()
         {
             TestModBase.impostorsIDs.Clear();
@@ -149,18 +127,20 @@ namespace TestMod.Patches
                 TestModBase.mls.LogInfo("Registering console command");
                 LC_API.ClientAPI.CommandHandler.RegisterCommand("suschance", (string[] args) =>
                 {
-
-                    float.TryParse(args[0], out float number);
-                    if (CheckConsoleCommand() && 0 < number && number < 1)
+                    if (CheckConsoleCommand() && float.TryParse(args[0], out float number) && 0 <= number && number <= 1 )
                     {
+                        if (args[0].Contains("."))
+                        {
+                            args[0] = args[0].Replace(".", ",");
+                        }
                         TestModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
                         TestModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
-                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to"+ args[0].ToString(), 1f,0, false);
+                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to "+ args[0].ToString(), 1f,0, false);
                     }
                     else
                     {
                         TestModBase.mls.LogInfo("Invalid argument");
-                        Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: Decimal number beetween 0-1. Ex: 0,25", 3f, default, true);
+                        Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: Numbers beetween 0-1", 3f, default, true);
                     }
 
                 });
@@ -168,15 +148,15 @@ namespace TestMod.Patches
 
                 LC_API.ClientAPI.CommandHandler.RegisterCommand("susrandom", (string[] args) =>
                 {
-                    if (CheckConsoleCommand())
-                    {
-                        if (args[0] == "yes")
+                if (CheckConsoleCommand())
+                {
+                    if (args[0] == "yes" || args[0] == "true" || args[0] == "1")
                         {
                             TestModBase.mls.LogInfo("Impostors Random changed to true");
                             TestModBase.ConfigisImposterCountRandom.Value = true;
                             Player.LocalPlayer.QueueTip("Succes", "Impostors Randomization changed succesfuly to true ", 1f, 0, false);
                         }
-                        else if (args[0] == "no")
+                        else if (args[0] == "no" || args[0] == "false" || args[0] == "0")
                         {
                             TestModBase.mls.LogInfo("Impostors Random changed to false");
                             TestModBase.ConfigisImposterCountRandom.Value = false;

@@ -4,29 +4,26 @@ using BepInEx.Logging;
 using HarmonyLib;
 using LC_API.Networking;
 using System.Collections.Generic;
-using TestMod.Patches;
+using SusMod.Patches;
 
-namespace TestMod
+namespace SusMod
 {
     [BepInPlugin(modGUID, modName, modVersion)]
-    public class TestModBase : BaseUnityPlugin
+    public class SusModBase : BaseUnityPlugin
     {
-        private const string modGUID = "TotalnieUnikatoweID";
+        private const string modGUID = "Sussy";
         private const string modName = "SusCompany";
         private const string modVersion = "1.0.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
-        private static TestModBase Instance;
+        private static SusModBase Instance;
         public static ManualLogSource mls;
         public static List<int> impostorsIDs = new List<int>();
-
-        public static int DeadImpostors;
-        public static int RecoveredImpostors;
-
+        public static bool DebugMode = false;
         public static ConfigEntry<float> ConfigimpostorSpawnRate;
         public static ConfigEntry<bool> ConfigisImposterCountRandom;
 
-
+        
 
         void Awake()
         {

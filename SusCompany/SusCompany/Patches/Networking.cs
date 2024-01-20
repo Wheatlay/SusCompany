@@ -11,7 +11,7 @@ internal class Networking
     public bool isImposterCountRandom { get; set; }
 }
 
-namespace TestMod.Patches
+namespace SusMod.Patches
 {
     [HarmonyPatch(typeof(StartMatchLever))]
     class StartMatchLeverPatch
@@ -22,9 +22,9 @@ namespace TestMod.Patches
         {
             if (Player.LocalPlayer.IsHost)
             {
-                TestModBase.mls.LogInfo("Sending config to clients");
-                Network.Broadcast("SyncConfig", new Networking() { HostImpostorSpawnRate = TestModBase.ConfigimpostorSpawnRate.Value,
-                    isImposterCountRandom = TestModBase.ConfigisImposterCountRandom.Value});
+                SusModBase.mls.LogInfo("Sending config to clients");
+                Network.Broadcast("SyncConfig", new Networking() { HostImpostorSpawnRate = SusModBase.ConfigimpostorSpawnRate.Value,
+                    isImposterCountRandom = SusModBase.ConfigisImposterCountRandom.Value});
             }
         }
     }

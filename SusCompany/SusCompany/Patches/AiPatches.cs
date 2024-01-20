@@ -1,21 +1,21 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 
-namespace TestMod.Patches
+namespace SusMod.Patches
 {
     [HarmonyPatch(typeof(EnemyAI))]
     class EnemyAiPatch
     {
-        //Larwa get stuck when it fall on impostor (at least on single player)
+        //Larva get stuck when it fall on impostor (at least on single player)
 
         [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
         [HarmonyPostfix]
         static public void MonstersDontTarget(PlayerControllerB playerScript, ref bool __result)
         {
-            if (TestModBase.impostorsIDs.Contains((int)playerScript.actualClientId))
+            if (SusModBase.impostorsIDs.Contains((int)playerScript.actualClientId))
             {
                 __result = false;
-                TestModBase.mls.LogInfo("Player " + playerScript.actualClientId + " is impostor and is not targetable");
+                SusModBase.mls.LogInfo("Player " + playerScript.actualClientId + " is impostor and is not targetable");
             }
         }
 
@@ -25,9 +25,9 @@ namespace TestMod.Patches
         {
             try
             {
-                if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+                if (SusModBase.impostorsIDs.Contains((int)__result.actualClientId))
                 {
-                    TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and shouldnt colide with mobs");
+                    SusModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and shouldnt colide with mobs");
                     __result = null;
                 }
             }
@@ -44,9 +44,9 @@ namespace TestMod.Patches
         {
             try
             {
-                if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+                if (SusModBase.impostorsIDs.Contains((int)__result.actualClientId))
                 {
-                    TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and should not be in line of sight check");
+                    SusModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and should not be in line of sight check");
                     __result = null;
                     //We might have a problem with situation when impostor is first in check line of sight, mob might get stuck then.
                 }

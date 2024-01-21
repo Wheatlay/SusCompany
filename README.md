@@ -1,4 +1,5 @@
-SusMod for Lethal Company
+# SusCompany: A Lethal Company Mod
+
 This is a mod that introduces a new gameplay mechanic where one player is pitted against the rest of the team.
 
 Features
@@ -14,7 +15,7 @@ Once the mod is installed, it will automatically be active in all games. The Imp
 Configuration
 Host of the lobby can configure:
 
-Sprawn rate of impostor with command
+Sprawn rate of impostor with console command
 /suschance [0 to 1]
 
 Randomizaton of impostor number within values of 0 to suschance

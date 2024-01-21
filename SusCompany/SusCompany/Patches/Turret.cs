@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 
-namespace TestMod.Patches
+namespace SusMod.Patches
 {
     [HarmonyPatch(typeof(Turret))]
     class TurretPach
@@ -11,13 +11,13 @@ namespace TestMod.Patches
         [HarmonyPostfix]
         static public void ExcludeImposterFromLineOfSight(ref PlayerControllerB __result)
         {
-            //TestModBase.mls.LogInfo("Enetering CheckForPlayersInLineOfSight");
-            //TestModBase.mls.LogInfo("__result.actualClientId) is : " + __result.actualClientId);
+            //SusModBase.mls.LogInfo("Enetering CheckForPlayersInLineOfSight");
+            //SusModBase.mls.LogInfo("__result.actualClientId) is : " + __result.actualClientId);
             try
             {
-                if (TestModBase.impostorsIDs.Contains((int)__result.actualClientId))
+                if (SusModBase.impostorsIDs.Contains((int)__result.actualClientId))
                 {
-                    TestModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and is not targetable by turret");
+                    SusModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and is not targetable by turret");
                     __result = null;
                     
                 }

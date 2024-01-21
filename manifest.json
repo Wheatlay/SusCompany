@@ -1,10 +1,10 @@
 {
     "name": "SusCompany",
     "version_number": "1.0.0",
-    "website_url": "https://github.com/your-github-username",
+    "website_url": "https://github.com/Wheatlay/SusCompany",
     "description": "This is a mod that introduces a new gameplay mechanic where one player is pitted against the rest of the team.",
     "dependencies": [
-        "BepInEx-BepInEx-5.x.x",
-        "LC_API-LC_API-1.x.x"
+        "BepInEx-BepInExPack-5.4.2100",
+        "2018-LC_API-3.4.5"
     ]
 }

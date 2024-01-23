@@ -11,15 +11,12 @@ namespace SusMod.Patches
         [HarmonyPostfix]
         static public void ExcludeImposterFromLineOfSight(ref PlayerControllerB __result)
         {
-            //SusModBase.mls.LogInfo("Enetering CheckForPlayersInLineOfSight");
-            //SusModBase.mls.LogInfo("__result.actualClientId) is : " + __result.actualClientId);
             try
             {
                 if (SusModBase.impostorsIDs.Contains((int)__result.actualClientId))
                 {
                     SusModBase.mls.LogInfo("Player " + __result.actualClientId + " is impostor and is not targetable by turret");
                     __result = null;
-                    
                 }
             }
             catch 

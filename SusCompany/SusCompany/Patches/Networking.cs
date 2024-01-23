@@ -7,25 +7,17 @@ using System.Collections.Generic;
 
 internal class Networking
 {
-    public float HostImpostorSpawnRate { get; set; }
-    public bool isImposterCountRandom { get; set; }
+    public List <int> ImpostorList { get; set; }
 }
 
 namespace SusMod.Patches
 {
-    [HarmonyPatch(typeof(StartMatchLever))]
-    class StartMatchLeverPatch
+    class NetworkingPatch
     {
-        [HarmonyPatch("StartGame")]
-        [HarmonyPostfix]
-        public static void GameStartSynchronizeConfig()
+        public static void SynchronizeImpList()
         {
-            if (Player.LocalPlayer.IsHost)
-            {
-                SusModBase.mls.LogInfo("Sending config to clients");
-                Network.Broadcast("SyncConfig", new Networking() { HostImpostorSpawnRate = SusModBase.ConfigimpostorSpawnRate.Value,
-                    isImposterCountRandom = SusModBase.ConfigisImposterCountRandom.Value});
-            }
+            SusModBase.mls.LogInfo("Sending imp list to clients");
+            Network.Broadcast("SyncImpList", new Networking() { ImpostorList=SusModBase.impostorsIDs,});
         }
     }
     

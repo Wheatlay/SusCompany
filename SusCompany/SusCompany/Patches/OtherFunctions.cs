@@ -75,6 +75,12 @@ namespace SusMod.Patches
                 case 5:
                     itemNameIm = "Stun grenade";
                     break;
+                case 6:
+                    itemNameIm = "Shotgun";
+                    break;
+                case 7:
+                    itemNameIm = "Key";
+                    break;
                 default:
                     itemNameIm = "";
                     break;
@@ -84,7 +90,7 @@ namespace SusMod.Patches
 
             LC_API.GameInterfaceAPI.Features.Item item;
             item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, true, player.Position, default);
-
+            //item = LC_API.GameInterfaceAPI.Features.Item.CreateAndGiveItem(itemNameIm, player, true, false);
             SusModBase.mls.LogInfo("item is:" + item);
 
             item.ItemProperties.itemName = "Impostor's " + itemNameIm;
@@ -124,25 +130,35 @@ namespace SusMod.Patches
 
         public static void RegisterConsoleCommands()
         {
-            SusModBase.mls.LogInfo("Registering console command");
-            LC_API.ClientAPI.CommandHandler.RegisterCommand("suschance", (string[] args) =>
+            SusModBase.mls.LogInfo("Registering console commands");
+            LC_API.ClientAPI.CommandHandler.RegisterCommand("susmax", (string[] args) =>
             {
                 if (args[0].Contains("."))
                 {
                     args[0] = args[0].Replace(".", ",");
                 }
-                if (CheckConsoleCommand() && float.TryParse(args[0], out float number) && 0 <= number && number <= 1 )
-                {
-                    SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
-                    SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
-                    Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to "+ args[0].ToString(), 1f,0, false);
-                }
-                else
-                {
-                    SusModBase.mls.LogInfo("Invalid argument");
-                    Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: Numbers beetween 0-1", 3f, default, true);
-                }
+                if (CheckConsoleCommand()){
+                    if (float.TryParse(args[0], out float number)){
+                        if (0 <= number && number <= 1)
+                        {
+                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
+                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value, 1f, 0, false);
+                        }
+                        else if (number <= 100 && number > 1)
+                        {
+                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
+                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0])/100;
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
+                        }
+                        else
+                        {
+                            SusModBase.mls.LogInfo("Invalid argument");
+                            Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: [0-1 or 1%-100%]", 3f, default, true);
+                        }
+                    }
 
+                }
             });
             
 
@@ -198,13 +214,6 @@ namespace SusMod.Patches
                 Player.LocalPlayer.QueueTip("Error", "Can't change impostors config while not in orbit", 3f, default, true);
             }
             return false;
-        }
-        public static void LocalPlayerDC(LC_API.GameInterfaceAPI.Events.EventArgs.Player.LeftEventArgs leftEventArgs)
-        {
-            if (leftEventArgs.Player.IsLocalPlayer)
-            {
-                OtherFunctions.RemoveImposter();
-            }
         }
     }
 }

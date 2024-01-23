@@ -75,6 +75,12 @@ namespace SusMod.Patches
                 case 5:
                     itemNameIm = "Stun grenade";
                     break;
+                case 6:
+                    itemNameIm = "Shotgun";
+                    break;
+                case 7:
+                    itemNameIm = "Key";
+                    break;
                 default:
                     itemNameIm = "";
                     break;
@@ -83,11 +89,11 @@ namespace SusMod.Patches
             SusModBase.mls.LogInfo("ItemNumber is:" + ItemNumber);
 
             LC_API.GameInterfaceAPI.Features.Item item;
-            item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, false, player.Position, default);
-
+            item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, true, player.Position, default);
+            //item = LC_API.GameInterfaceAPI.Features.Item.CreateAndGiveItem(itemNameIm, player, true, false);
             SusModBase.mls.LogInfo("item is:" + item);
 
-            //item.ItemProperties.itemName = "Impostor's " + itemNameIm;
+            item.ItemProperties.itemName = "Impostor's " + itemNameIm;
             item.ItemProperties.twoHanded = false;
             item.ItemProperties.isConductiveMetal = false;
             item.ItemProperties.isScrap = false;
@@ -137,13 +143,13 @@ namespace SusMod.Patches
                         {
                             SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
                             SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + args[0].ToString(), 1f, 0, false);
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value, 1f, 0, false);
                         }
                         else if (number <= 100 && number > 1)
                         {
                             SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
                             SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0])/100;
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + args[0].ToString(), 1f, 0, false);
+                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
                         }
                         else
                         {

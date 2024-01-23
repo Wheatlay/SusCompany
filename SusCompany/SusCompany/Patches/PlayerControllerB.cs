@@ -72,6 +72,16 @@ namespace SusMod.Patches
                 }
             }
 
+            //give impostor item debug shotgun
+            if (BepInEx.UnityInput.Current.GetKeyDown("F7"))
+            {
+                SusModBase.mls.LogInfo("F7 pressed");
+                if (SusModBase.DebugMode)
+                {
+                    OtherFunctions.GetImpostorStartingItem(7,player:Player.LocalPlayer);
+                }
+            }
+
             //Active list debug
             if (BepInEx.UnityInput.Current.GetKeyDown("F9"))
             {

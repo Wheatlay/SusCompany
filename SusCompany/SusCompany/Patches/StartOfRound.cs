@@ -20,7 +20,7 @@ namespace SusMod.Patches
         [HarmonyPostfix]
         public static void ImpostorStartGame(ref int ___randomMapSeed,ref int ___currentLevelID)
         {
-            if (___currentLevelID != 3)
+            if (___currentLevelID != 3 && Player.LocalPlayer.IsHost)
             {
                 SusModBase.mls.LogInfo("Seed is : " + ___randomMapSeed);
                 SusModBase.impostorsIDs.Clear();
@@ -52,22 +52,11 @@ namespace SusMod.Patches
                     if (!SusModBase.impostorsIDs.Contains(choosenImpostorID))
                     {
                         SusModBase.impostorsIDs.Add(choosenImpostorID);
-                       
-                        if (Player.LocalPlayer.IsHost)
-                        {
-                            OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == choosenImpostorID));
-
-                        }
+                        OtherFunctions.GetImpostorStartingItem(random.Next(1, 6), Player.ActiveList.FirstOrDefault(p => (int)p.ClientId == choosenImpostorID));
                         SusModBase.mls.LogInfo("Client ID " + choosenImpostorID + " is impostor");
                     }
                 }
-
-                if (SusModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
-                {
-                    HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
-                    Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
-                    Player.LocalPlayer.PlayerController.nightVision.range = 5000;
-                }
+                NetworkingPatch.SynchronizeImpList();
             }
             
         }
@@ -79,14 +68,17 @@ namespace SusMod.Patches
             OtherFunctions.RemoveImposter();
         }
 
-        [NetworkMessage("SyncConfig")]
+        [NetworkMessage("SyncImpList")]
         public static void SyncHandler(ulong sender, Networking message)
         {
-            SusModBase.mls.LogInfo("Recived config from host");
-            SusModBase.mls.LogInfo("HostImpostorSpawnRate is : " + message.HostImpostorSpawnRate);
-            SusModBase.mls.LogInfo("isImposterCountRandom is : " + message.isImposterCountRandom);
-            SusModBase.ConfigimpostorSpawnRate.Value = message.HostImpostorSpawnRate;
-            SusModBase.ConfigisImposterCountRandom.Value = message.isImposterCountRandom;
+            SusModBase.mls.LogInfo("Recived imp list from host");
+            SusModBase.impostorsIDs = message.ImpostorList;
+            if (SusModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
+            {
+                HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
+                Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
+                Player.LocalPlayer.PlayerController.nightVision.range = 5000;
+            }
         }
 
     }

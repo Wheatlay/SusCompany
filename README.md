@@ -16,7 +16,9 @@ Configuration
 Host of the lobby can configure:
 
 Sprawn rate of impostor with console command
-/suschance [0 to 1]
+
+/suschance [0 to 1] Default value is 0.25
+
 
 Randomizaton of impostor number within values of 0 to suschance
-/susrandom [true,false]
+/susrandom [true,false] Default value is true

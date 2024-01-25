@@ -8,6 +8,7 @@ using LC_API.Networking.Serializers;
 using LC_API;
 using System.Collections;
 using UnityEngine;
+using LCShrinkRay.comp;
 
 
 namespace SusMod.Patches
@@ -58,7 +59,9 @@ namespace SusMod.Patches
                 }
                 NetworkingPatch.SynchronizeImpList();
             }
-            
+
+
+
         }
 
         [HarmonyPatch("ShipHasLeft")]
@@ -66,6 +69,7 @@ namespace SusMod.Patches
         static public void ShipHasLeftPatch()
         {
             OtherFunctions.RemoveImposter();
+            VentsPatch.unsussifyAll();
         }
 
         [NetworkMessage("SyncImpList")]
@@ -78,6 +82,10 @@ namespace SusMod.Patches
                 HUDManager.Instance.DisplayTip("Alert", "You Are The Impostor!", true, false, "");
                 Player.LocalPlayer.PlayerController.nightVision.intensity = 3000;
                 Player.LocalPlayer.PlayerController.nightVision.range = 5000;
+            }
+            if (message.Vents)
+            {
+                VentsPatch.SussifyAll();
             }
         }
 

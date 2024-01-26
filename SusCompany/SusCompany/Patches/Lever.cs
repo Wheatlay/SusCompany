@@ -28,7 +28,7 @@ namespace TestMod.Patches
             }
             catch
             {
-
+                SusModBase.mls.LogInfo("Error in LeverPatch");
             }
 
 

@@ -98,8 +98,6 @@ namespace SusMod.Patches
                 SusModBase.mls.LogInfo("F9 pressed");
                 if (SusModBase.DebugMode)
                 {
-                    Player.LocalPlayer.PlayerController.movementSpeed = DefSpeed;
-                    Player.LocalPlayer.PlayerController.climbSpeed = DefClimbSpeed;
                 }
             }
 

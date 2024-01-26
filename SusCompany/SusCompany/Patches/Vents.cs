@@ -125,17 +125,17 @@ namespace LCShrinkRay.comp
             SusModBase.mls.LogInfo("0");
             if (enemyVent.gameObject.AddComponent<SussifiedVent>() != null)
             {
-                SusModBase.mls.LogInfo("1");
+                //SusModBase.mls.LogInfo("1");
                 UnityEngine.Object.Destroy(enemyVent.gameObject.AddComponent<SussifiedVent>());
             }
             if (vent.GetComponent<BoxCollider>() != null)
             {
-                SusModBase.mls.LogInfo("2");
+                //SusModBase.mls.LogInfo("2");
                 UnityEngine.Object.Destroy(vent.GetComponent<BoxCollider>());
             }
             if (vent.GetComponent<InteractTrigger>() != null)
             {
-                SusModBase.mls.LogInfo("3");
+                //SusModBase.mls.LogInfo("3");
                 UnityEngine.Object.Destroy(vent.GetComponent<InteractTrigger>());
             }
         }

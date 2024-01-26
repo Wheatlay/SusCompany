@@ -41,7 +41,7 @@ namespace SusMod.Patches
                     if (int.TryParse(args[0], out int number) && number <= 100 && number >= 0)
                     {
                         SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString() + "%");
-                        SusModBase.ConfigimpostorSpawnRate.Value = int.Parse(args[0]) / 100;
+                        SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]) / 100;
                         Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
                     }
                     else

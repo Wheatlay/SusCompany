@@ -36,33 +36,19 @@ namespace SusMod.Patches
             SusModBase.mls.LogInfo("Registering console commands");
             LC_API.ClientAPI.CommandHandler.RegisterCommand("susmax", (string[] args) =>
             {
-                if (args[0].Contains("."))
-                {
-                    args[0] = args[0].Replace(".", ",");
-                }
                 if (CheckConsoleCommand())
                 {
-                    if (float.TryParse(args[0], out float number))
+                    if (int.TryParse(args[0], out int number) && number <= 100 && number >= 0)
                     {
-                        if (0 <= number && number <= 1)
-                        {
-                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
-                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value, 1f, 0, false);
-                        }
-                        else if (number <= 100 && number > 1)
-                        {
-                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
-                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]) / 100;
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
-                        }
-                        else
-                        {
-                            SusModBase.mls.LogInfo("Invalid argument");
-                            Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: [0-1 or 1%-100%]", 3f, default, true);
-                        }
+                        SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString() + "%");
+                        SusModBase.ConfigimpostorSpawnRate.Value = int.Parse(args[0]) / 100;
+                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
                     }
-
+                    else
+                    {
+                        SusModBase.mls.LogInfo("Invalid argument");
+                        Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: [0-100%]", 3f, default, true);
+                    }
                 }
             });
 

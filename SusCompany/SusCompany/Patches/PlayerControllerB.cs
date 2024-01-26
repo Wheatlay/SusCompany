@@ -8,8 +8,8 @@ namespace SusMod.Patches
     [HarmonyPatch(typeof(PlayerControllerB))]
     class PlayerControllerBPatch
     {
-        static float DefSpeed =0;
-        static float DefClimbSpeed=0;
+        static float DefSpeed = 0;
+        static float DefClimbSpeed = 0;
 
         [HarmonyPatch("Update")]
         [HarmonyPostfix]

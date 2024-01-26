@@ -153,8 +153,6 @@ namespace LCShrinkRay.comp
                 //teleport da playa to dis vent
                 if (siblingVent != null)
                 {
-                    //SusModBase.mls.LogInfo("\n⠀⠀⠀⠀⢀⣴⣶⠿⠟⠻⠿⢷⣦⣄⠀⠀⠀\r\n⠀⠀⠀⠀⣾⠏⠀⠀⣠⣤⣤⣤⣬⣿⣷⣄⡀\r\n⠀⢀⣀⣸⡿⠀⠀⣼⡟⠁⠀⠀⠀⠀⠀⠙⣷\r\n⢸⡟⠉⣽⡇⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⢀⣿\r\n⣾⠇⠀⣿⡇⠀⠀⠘⠿⢶⣶⣤⣤⣶⡶⣿⠋\r\n⣿⠂⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠃\r\n⣿⡆⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀\r\n⢿⡇⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠀\r\n⠘⠻⠷⢿⡇⠀⠀⠀⣴⣶⣶⠶⠖⠀⢸⡟⠀\r\n⠀⠀⠀⢸⣇⠀⠀⠀⣿⡇⣿⡄⠀⢀⣿⠇⠀\r\n⠀⠀⠀⠘⣿⣤⣤⣴⡿⠃⠙⠛⠛⠛⠋⠀⠀");
-                    //StartCoroutine(OccupyVent(siblingVent));
                     siblingVent.ventAudio.Play();
                     transform.position = siblingVent.floorNode.transform.position;
                 }
@@ -163,19 +161,6 @@ namespace LCShrinkRay.comp
                     //7.9186 0.286 -14.1901
                     transform.position = new Vector3(7.9186f, 0.286f, -14.1901f);
                 }
-            }
-
-            private IEnumerator OccupyVent()
-            {
-                EnemyVent thisVent = this.transform.parent.gameObject.transform.GetComponent<EnemyVent>();
-                thisVent.OpenVentClientRpc();
-                thisVent.occupied = true;
-                siblingVent.occupied = true;
-                float delay = 0.2f;
-                yield return new WaitForSeconds(delay);
-                thisVent.occupied = false;
-                siblingVent.occupied = false;
-                siblingVent.OpenVentClientRpc();
             }
         }
     }

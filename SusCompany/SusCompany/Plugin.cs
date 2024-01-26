@@ -13,7 +13,7 @@ namespace SusMod
     {
         private const string modGUID = "Sussy";
         private const string modName = "SusCompany";
-        private const string modVersion = "1.0.3";
+        private const string modVersion = "1.1.0";
 
         private readonly Harmony harmony = new Harmony(modGUID);
         private static SusModBase Instance;

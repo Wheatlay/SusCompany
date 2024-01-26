@@ -2,22 +2,20 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using LC_API.GameInterfaceAPI.Features;
-using System.Linq;
-using System.Collections;
-using Unity.Netcode;
-using static LC_API.GameInterfaceAPI.Features.Player;
-using System.Runtime.CompilerServices;
 
 namespace SusMod.Patches
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     class PlayerControllerBPatch
     {
+        static float DefSpeed = 0;
+        static float DefClimbSpeed = 0;
 
         [HarmonyPatch("Update")]
         [HarmonyPostfix]
         static public void PlayerControllerUpdate()
         {
+
             IEnumerator<Player> activePlayers = Player.ActiveList.GetEnumerator();
             while (activePlayers.MoveNext())
             {
@@ -82,22 +80,24 @@ namespace SusMod.Patches
                 }
             }
 
-            //Active list debug
+
+            if (BepInEx.UnityInput.Current.GetKeyDown("F8"))
+            {
+                SusModBase.mls.LogInfo("F8 pressed");
+                if (SusModBase.DebugMode)
+                {
+                    DefSpeed = Player.LocalPlayer.PlayerController.movementSpeed;
+                    Player.LocalPlayer.PlayerController.movementSpeed = 30f;
+                    DefClimbSpeed = Player.LocalPlayer.PlayerController.climbSpeed;
+                    Player.LocalPlayer.PlayerController.climbSpeed = 100f;
+                }
+            }
+
             if (BepInEx.UnityInput.Current.GetKeyDown("F9"))
             {
                 SusModBase.mls.LogInfo("F9 pressed");
-                IEnumerator<Player> activePlayers2 = Player.ActiveList.GetEnumerator();
-                while (activePlayers2.MoveNext())
+                if (SusModBase.DebugMode)
                 {
-                    if (activePlayers2.Current.IsLocalPlayer)
-                    {
-                        SusModBase.mls.LogInfo("Local player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.Username);
-                    }
-                    else
-                    {
-                        SusModBase.mls.LogInfo("Player " + activePlayers2.Current.ClientId + " is " + activePlayers2.Current.Username);
-                    }
-                    
                 }
             }
 

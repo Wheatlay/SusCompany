@@ -4,6 +4,7 @@ using LC_API.GameInterfaceAPI.Features;
 using UnityEngine;
 using System.Collections;
 using System.Runtime.Remoting.Messaging;
+using LCShrinkRay.comp;
 
 namespace SusMod.Patches
 {
@@ -51,6 +52,7 @@ namespace SusMod.Patches
             Player.LocalPlayer.PlayerController.nightVision.range = 2000;
             Player.LocalPlayer.PlayerController.nightVision.enabled = false;
             SusModBase.mls.LogInfo("Removing Impostors");
+            
 
         }
 
@@ -128,93 +130,8 @@ namespace SusMod.Patches
             }
         }
 
-        public static void RegisterConsoleCommands()
-        {
-            SusModBase.mls.LogInfo("Registering console commands");
-            LC_API.ClientAPI.CommandHandler.RegisterCommand("susmax", (string[] args) =>
-            {
-                if (args[0].Contains("."))
-                {
-                    args[0] = args[0].Replace(".", ",");
-                }
-                if (CheckConsoleCommand()){
-                    if (float.TryParse(args[0], out float number)){
-                        if (0 <= number && number <= 1)
-                        {
-                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
-                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]);
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value, 1f, 0, false);
-                        }
-                        else if (number <= 100 && number > 1)
-                        {
-                            SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString());
-                            SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0])/100;
-                            Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
-                        }
-                        else
-                        {
-                            SusModBase.mls.LogInfo("Invalid argument");
-                            Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: [0-1 or 1%-100%]", 3f, default, true);
-                        }
-                    }
-
-                }
-            });
-            
-
-            LC_API.ClientAPI.CommandHandler.RegisterCommand("susrandom", (string[] args) =>
-            {
-            if (CheckConsoleCommand())
-            {
-                if (args[0] == "yes" || args[0] == "true" || args[0] == "1")
-                    {
-                        SusModBase.mls.LogInfo("Impostors Random changed to true");
-                        SusModBase.ConfigisImposterCountRandom.Value = true;
-                        Player.LocalPlayer.QueueTip("Succes", "Impostors Randomization changed succesfuly to true ", 1f, 0, false);
-                    }
-                    else if (args[0] == "no" || args[0] == "false" || args[0] == "0")
-                    {
-                        SusModBase.mls.LogInfo("Impostors Random changed to false");
-                        SusModBase.ConfigisImposterCountRandom.Value = false;
-                        Player.LocalPlayer.QueueTip("Succes", "Impostors Randomization changed succesfuly to false ", 1f, 0, false);
-                    }
-                    else
-                    {
-                        SusModBase.mls.LogInfo("Invalid argument");
-                        Player.LocalPlayer.QueueTip("Error", "Invalid argument - accepted arguments: yes , no", 3f, default, true);
-                    }
-                }
-            });
-
-            LC_API.ClientAPI.CommandHandler.RegisterCommand("susdebug", (string[] args) =>
-            {
-                SusModBase.DebugMode = true;
-                SusModBase.mls.LogInfo("Debug mode enabled");
-                Player.LocalPlayer.QueueTip("Succes", "Debug mode enabled", 1f, 0, false);
-            });
-
-        }
-        public static bool CheckConsoleCommand()
-        {
-            if (LC_API.GameInterfaceAPI.GameState.ShipState == LC_API.Data.ShipState.InOrbit)
-            {
-                if (Player.LocalPlayer.IsHost)
-                {
-                    return true;
-                }
-                else
-                {
-                    SusModBase.mls.LogInfo("You are not the host");
-                    Player.LocalPlayer.QueueTip("Error", "You are not the host", 3f, default, true);
-                }
-            }
-            else
-            {
-                SusModBase.mls.LogInfo("Can't change impostors config while not in orbit");
-                Player.LocalPlayer.QueueTip("Error", "Can't change impostors config while not in orbit", 3f, default, true);
-            }
-            return false;
-        }
+        
+        
     }
 }
 

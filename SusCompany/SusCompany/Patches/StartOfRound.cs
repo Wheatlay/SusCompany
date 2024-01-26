@@ -58,6 +58,7 @@ namespace SusMod.Patches
                     }
                 }
                 NetworkingPatch.SynchronizeImpList();
+                ImpostorLever();
             }
 
 
@@ -86,6 +87,17 @@ namespace SusMod.Patches
             if (message.Vents)
             {
                 VentsPatch.SussifyAll();
+            }
+            ImpostorLever();
+        }
+
+        public static void ImpostorLever()
+        {
+            if (SusModBase.impostorsIDs.Contains((int)Player.LocalPlayer.ClientId))
+            {
+                InteractTrigger triggerScript = UnityEngine.Object.FindObjectOfType<StartMatchLever>().triggerScript;
+                triggerScript.interactable = false;
+                triggerScript.disabledHoverTip = "Impostor can't start the ship";
             }
         }
 

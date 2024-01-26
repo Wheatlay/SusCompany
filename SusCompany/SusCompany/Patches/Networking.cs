@@ -42,7 +42,7 @@ namespace SusMod.Patches
                     {
                         SusModBase.mls.LogInfo("Impostors chance changed to " + args[0].ToString() + "%");
                         SusModBase.ConfigimpostorSpawnRate.Value = float.Parse(args[0]) / 100;
-                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + SusModBase.ConfigimpostorSpawnRate.Value.ToString(), 1f, 0, false);
+                        Player.LocalPlayer.QueueTip("Succes", "Impostors chance changed succesfuly to " + args[0].ToString() + "%", 1f, 0, false);
                     }
                     else
                     {

@@ -8,8 +8,6 @@ namespace SusMod.Patches
     [HarmonyPatch(typeof(PlayerControllerB))]
     class PlayerControllerBPatch
     {
-        static float DefSpeed = 0;
-        static float DefClimbSpeed = 0;
 
         [HarmonyPatch("Update")]
         [HarmonyPostfix]
@@ -86,9 +84,7 @@ namespace SusMod.Patches
                 SusModBase.mls.LogInfo("F8 pressed");
                 if (SusModBase.DebugMode)
                 {
-                    DefSpeed = Player.LocalPlayer.PlayerController.movementSpeed;
                     Player.LocalPlayer.PlayerController.movementSpeed = 30f;
-                    DefClimbSpeed = Player.LocalPlayer.PlayerController.climbSpeed;
                     Player.LocalPlayer.PlayerController.climbSpeed = 100f;
                 }
             }

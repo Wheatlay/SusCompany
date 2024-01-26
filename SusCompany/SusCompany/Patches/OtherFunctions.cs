@@ -91,7 +91,7 @@ namespace SusMod.Patches
             SusModBase.mls.LogInfo("ItemNumber is:" + ItemNumber);
 
             LC_API.GameInterfaceAPI.Features.Item item;
-            item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, true, player.Position, default);
+            item = LC_API.GameInterfaceAPI.Features.Item.CreateAndSpawnItem(itemNameIm, false, player.Position, default);
             //item = LC_API.GameInterfaceAPI.Features.Item.CreateAndGiveItem(itemNameIm, player, true, false);
             SusModBase.mls.LogInfo("item is:" + item);
 
